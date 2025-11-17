@@ -1,179 +1,87 @@
-<!doctype html>
-<html lang="ar" dir="rtl">
+<!DOCTYPE html>
+<html lang="ar">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>النجم داتا — منشئ السيرة</title>
-
-  <!-- مكتبات -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.15.0/Sortable.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.3/html2pdf.bundle.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-
-  <link rel="stylesheet" href="style.css" />
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>النجم داتا - CV Builder</title>
+<link rel="stylesheet" href="style.css">
 </head>
+
 <body>
-  <!-- خلفية سينمائية -->
-  <div class="cinema-bg"></div>
 
-  <!-- شاشة ترحيب -->
-  <div id="welcome" class="welcome-overlay" aria-hidden="false">
-    <div class="welcome-box">
-      <h1>أهلاً بك في النجم داتا</h1>
-      <p class="small">سيتم الانتقال تلقائياً بعد 5 ثوانٍ</p>
+<div id="welcomeBox" class="welcome">
+    <h1>مرحباً بك في النجم داتا</h1>
+    <p>سيتم بدء إنشاء السيرتك الذاتية خلال ثوانٍ…</p>
+</div>
+
+<div id="stepContainer">
+
+    <!-- خطوة 1 -->
+    <div class="step" id="step1">
+        <h2>الاسم والصورة الشخصية</h2>
+        <input type="text" id="name" placeholder="اكتب اسمك">
+        <input type="file" id="photo" accept="image/*">
+        <button onclick="nextStep()">التالي</button>
     </div>
-  </div>
 
-  <header class="topbar">
-    <div class="logo">النجم داتا</div>
-    <div class="top-actions">
-      <button id="loadData" class="btn">تحميل المحفوظ</button>
-      <button id="saveData" class="btn">حفظ محلي</button>
+    <!-- خطوة 2 -->
+    <div class="step" id="step2">
+        <h2>العمر – المهنة – التعليم</h2>
+        <input type="number" id="age" placeholder="العمر">
+        <input type="text" id="job" placeholder="المهنة">
+        <input type="text" id="edu" placeholder="المؤهل الدراسي">
+        <button onclick="nextStep()">التالي</button>
     </div>
-  </header>
 
-  <main class="container">
-    <!-- الشريط الجانبي للخطوات -->
-    <aside class="steps" id="steps">
-      <!-- كل خطوة تمثل صفحة بيانات منفصلة -->
-      <button class="step-btn active" data-step="0">1 - الاسم</button>
-      <button class="step-btn" data-step="1">2 - الصورة</button>
-      <button class="step-btn" data-step="2">3 - السن</button>
-      <button class="step-btn" data-step="3">4 - المهنة</button>
-      <button class="step-btn" data-step="4">5 - التعليم</button>
-      <button class="step-btn" data-step="5">6 - الرقم القومي</button>
-      <button class="step-btn" data-step="6">7 - التقديم إلى</button>
-      <button class="step-btn" data-step="7">8 - الحسابات</button>
-      <button class="step-btn" data-step="8">9 - التصميم</button>
-      <button class="step-btn" data-step="9">10 - المعاينة</button>
-    </aside>
+    <!-- خطوة 3 -->
+    <div class="step" id="step3">
+        <h2>الرقم القومي – التقديم إلى</h2>
+        <input type="text" id="nid" placeholder="الرقم القومي (اختياري)">
+        <input type="text" id="apply" placeholder="التقديم إلى (وظيفة/جهة)">
+        <button onclick="nextStep()">التالي</button>
+    </div>
 
-    <section class="content">
-      <!-- صفحات البيانات (كل صفحة div يمثل صفحة واحدة) -->
-      <div class="page" data-page="0">
-        <h2>الاسم الكامل</h2>
-        <input id="name" type="text" placeholder="اكتب اسمك الكامل" />
-        <div class="nav-row">
-          <button class="btn next">التالي</button>
-        </div>
-      </div>
+    <!-- خطوة 4 -->
+    <div class="step" id="step4">
+        <h2>أضف حسابات السوشيال ميديا</h2>
+        <div id="socialContainer"></div>
 
-      <div class="page hidden" data-page="1">
-        <h2>الصورة الشخصية</h2>
-        <input id="photoUrl" type="text" placeholder="رابط الصورة (اختياري)" />
-        <p class="small or">أو ارفع ملف</p>
-        <input id="photoFile" type="file" accept="image/*" />
-        <div class="nav-row">
-          <button class="btn prev">السابق</button>
-          <button class="btn next">التالي</button>
-        </div>
-      </div>
+        <button onclick="addSocial()">+ إضافة حساب</button><br><br>
+        <button onclick="nextStep()">التالي</button>
+    </div>
 
-      <div class="page hidden" data-page="2">
-        <h2>السن</h2>
-        <input id="age" type="number" min="0" placeholder="العمر" />
-        <div class="nav-row">
-          <button class="btn prev">السابق</button>
-          <button class="btn next">التالي</button>
-        </div>
-      </div>
+    <!-- خطوة 5 -->
+    <div class="step" id="step5">
+        <h2>اختيارات التصميم</h2>
 
-      <div class="page hidden" data-page="3">
-        <h2>المهنة</h2>
-        <input id="job" type="text" placeholder="المهنة" />
-        <div class="nav-row">
-          <button class="btn prev">السابق</button>
-          <button class="btn next">التالي</button>
-        </div>
-      </div>
+        <label>لون الخط</label>
+        <input type="color" id="fontColor">
 
-      <div class="page hidden" data-page="4">
-        <h2>التعليم</h2>
-        <input id="education" type="text" placeholder="المؤهل" />
-        <div class="nav-row">
-          <button class="btn prev">السابق</button>
-          <button class="btn next">التالي</button>
-        </div>
-      </div>
+        <label>حجم الخط</label>
+        <input type="range" id="fontSize" min="12" max="38" value="20">
 
-      <div class="page hidden" data-page="5">
-        <h2>الرقم القومي</h2>
-        <input id="nid" type="text" placeholder="الرقم القومي (اختياري)" />
-        <div class="nav-row">
-          <button class="btn prev">السابق</button>
-          <button class="btn next">التالي</button>
-        </div>
-      </div>
-
-      <div class="page hidden" data-page="6">
-        <h2>التقديم إلى</h2>
-        <input id="applyTo" type="text" placeholder="جهة التقديم أو الوظيفة" />
-        <div class="nav-row">
-          <button class="btn prev">السابق</button>
-          <button class="btn next">التالي</button>
-        </div>
-      </div>
-
-      <div class="page hidden" data-page="7">
-        <h2>الحسابات ووسائل التواصل</h2>
-        <div class="social-controls">
-          <input id="s_name" placeholder="اسم المنصة (مثال: فيسبوك)" />
-          <input id="s_link" placeholder="الرابط" />
-          <button id="addSocial" class="btn">أضف</button>
-        </div>
-        <div id="socialsList" class="social-list"></div>
-        <div class="nav-row">
-          <button class="btn prev">السابق</button>
-          <button class="btn next">التالي</button>
-        </div>
-      </div>
-
-      <div class="page hidden" data-page="8">
-        <h2>خيارات التصميم</h2>
-        <label>حجم الخط: <span id="fontSizeLabel">16</span>px</label>
-        <input id="fontSize" type="range" min="12" max="28" value="16" />
-        <label>لون الخط:</label>
-        <input id="fontColor" type="color" value="#111111" />
-        <label>نوع الخط:</label>
+        <label>نوع الخط</label>
         <select id="fontFamily">
-          <option value="Tahoma, Arial, sans-serif">Tahoma</option>
-          <option value="Georgia, serif">Serif</option>
-          <option value="'Courier New', monospace">Monospace</option>
+            <option value="Arial">Arial</option>
+            <option value="Cairo">Cairo</option>
+            <option value="Tahoma">Tahoma</option>
         </select>
-        <label>الخلفية السينمائية:</label>
-        <select id="bgSelect">
-          <option value="cinema1">مضيئة</option>
-          <option value="cinema2">سوداء ذهبي</option>
-          <option value="cinema3">ليلي</option>
-        </select>
-        <div class="nav-row">
-          <button class="btn prev">السابق</button>
-          <button class="btn next" id="goPreview">المعاينة</button>
-        </div>
-      </div>
 
-      <!-- صفحة المعاينة النهائية -->
-      <div class="page hidden" data-page="9">
-        <h2>معاينة السيرة</h2>
-        <p class="small">اسحب الأقسام لإعادة الترتيب</p>
-        <div class="controls">
-          <button id="buildCv" class="btn">بناء السيرة</button>
-          <button id="downloadPdf" class="btn">تحميل PDF</button>
-          <button id="genQR" class="btn">إنشاء QR</button>
-          <button id="downloadQR" class="btn">تحميل QR</button>
-        </div>
+        <button onclick="nextStep()">معاينة السيرة</button>
+    </div>
 
-        <div id="cvContainer" class="cv" role="region" aria-label="معاينة السيرة"></div>
+</div>
 
-        <div id="qrArea" class="qr-area"></div>
+<!-- معاينة الـCV -->
+<div id="cvPreview" class="cv-box"></div>
 
-        <div class="nav-row">
-          <button class="btn prev">السابق</button>
-        </div>
-      </div>
-    </section>
-  </main>
+<button id="savePDF" onclick="downloadPDF()">تحميل PDF</button>
+<button id="saveQR" onclick="generateQR()">إنشاء QR</button>
+<div id="qrCode"></div>
 
-  <script src="script.js"></script>
+<script src="script.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.3/html2pdf.bundle.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+
 </body>
 </html>
